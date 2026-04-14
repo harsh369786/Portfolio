@@ -1,0 +1,27 @@
+import type { Metadata } from "next";
+import { Inter, Space_Grotesk } from "next/font/google";
+import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
+
+export const metadata: Metadata = {
+  title: "Harsh Shah | Senior Creative Developer",
+  description: "Senior Creative Developer specialized in AI-powered products and high-performance web applications.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="dark">
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans bg-background text-foreground antialiased`}>
+        <div className="grain-overlay" />
+        <div className="bg-radial-glow fixed inset-0 pointer-events-none" />
+        {children}
+      </body>
+    </html>
+  );
+}
