@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans bg-background text-foreground antialiased`}>
         <div className="grain-overlay" />
-        <div className="bg-radial-glow fixed inset-0 pointer-events-none" />
+
         {children}
       </body>
     </html>

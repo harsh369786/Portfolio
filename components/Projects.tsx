@@ -15,13 +15,13 @@ function Testimonial({ quote, attribution }: TestimonialProps) {
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: 0.2 }}
-      className="mt-8 bg-[#1A1A1A] border-l-4 border-accent p-8 rounded-r-2xl relative overflow-hidden"
+      className="mt-8 bg-[#111111] border-l-4 border-accent p-8 rounded-r-2xl relative overflow-hidden"
     >
-      <QuoteIcon className="absolute top-4 left-4 w-12 h-12 text-accent opacity-20" />
+      <QuoteIcon className="absolute top-4 left-4 w-12 h-12 text-accent opacity-10" />
       <p className="text-base text-[#D0D0D0] italic font-serif leading-relaxed relative z-10">
         "{quote}"
       </p>
-      <p className="mt-4 text-sm text-accent font-medium tracking-wide">
+      <p className="mt-4 text-sm text-accent font-medium tracking-wide font-sans uppercase">
         — {attribution}
       </p>
     </motion.div>
@@ -31,7 +31,7 @@ function Testimonial({ quote, attribution }: TestimonialProps) {
 const PROJECTS = [
   {
     number: "01",
-    year: "2024",
+    year: "2026",
     tags: ["E-Commerce", "AI Integration", "Full-Stack"],
     title: "PS Kitchenware",
     subtitle: "AI-Enhanced E-Commerce Ecosystem",
@@ -50,7 +50,7 @@ const PROJECTS = [
   },
   {
     number: "02",
-    year: "2024",
+    year: "2026",
     tags: ["D2C", "E-Commerce", "Payments", "Automation"],
     title: "Alum Fresh by The Aura Company",
     subtitle: "Premium D2C E-Commerce Experience",
@@ -71,11 +71,11 @@ const PROJECTS = [
 
 export default function Projects() {
   return (
-    <section id="work" className="relative z-20 bg-background px-6 py-32 md:px-24">
+    <section id="work" className="relative z-20 bg-background px-6 py-32 md:px-24 border-t border-white/5">
       <div className="max-w-7xl mx-auto">
         <div className="mb-20">
           <p className="text-xs uppercase tracking-[0.4em] text-accent font-medium mb-4">Selected Work (02)</p>
-          <h2 className="text-4xl md:text-6xl font-heading font-bold tracking-tight">Things I've Built</h2>
+          <h2 className="text-4xl md:text-6xl font-heading font-bold tracking-tight text-white">Things I've Built</h2>
         </div>
 
         <div className="space-y-32">
@@ -86,7 +86,7 @@ export default function Projects() {
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative flex flex-col lg:flex-row gap-12 bg-[#161616] p-8 md:p-12 rounded-3xl border border-white/5 transition-all duration-500 hover:bg-[#1E1E1E] hover:-translate-y-1 overflow-hidden"
+                className="group relative flex flex-col lg:flex-row gap-12 bg-[#111111] p-8 md:p-12 rounded-3xl border border-white/5 transition-all duration-500 hover:border-accent/30 overflow-hidden"
               >
                 {/* Accent Border Animation */}
                 <div className="absolute left-0 top-0 w-[4px] h-0 bg-accent transition-all duration-500 group-hover:h-full" />
@@ -111,10 +111,10 @@ export default function Projects() {
                 {/* Right: Content */}
                 <div className="lg:w-3/4 space-y-6 md:space-y-8">
                   <div>
-                    <h3 className="text-2xl md:text-5xl font-heading font-bold mb-2 group-hover:text-accent transition-colors">
+                    <h3 className="text-2xl md:text-5xl font-heading font-bold mb-2 group-hover:text-accent transition-colors text-white">
                       {project.title}
                     </h3>
-                    <p className="text-lg md:text-xl text-accent font-medium">{project.subtitle}</p>
+                    <p className="text-lg md:text-xl text-accent font-medium uppercase tracking-wide">{project.subtitle}</p>
                   </div>
 
                   <p className="text-secondary text-sm md:text-lg leading-relaxed max-w-3xl">

@@ -2,19 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #121212;
-  --foreground: #F5F5F5;
-  --text-secondary: #888888;
-  --accent: #2979FF;
-  --accent-glow: rgba(41, 121, 255, 0.15);
+@layer base {
+  :root {
+    --background: #080808;
+    --foreground: #FFFFFF;
+    --text-secondary: #94A3B8;
+    --accent: #3B82F6;
+    --accent-glow: rgba(59, 130, 246, 0.2);
+  }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
-  cursor: none; /* Hide default cursor for custom cursor */
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -28,7 +32,7 @@ body {
   color: #fff;
 }
 
-/* Grain Texture Overlay */
+/* Premium Grain Texture Overlay */
 .grain-overlay {
   position: fixed;
   top: 0;
@@ -37,28 +41,31 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.035;
+  opacity: 0.04;
   background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-  filter: contrast(120%) brightness(100%);
+  filter: contrast(150%) brightness(100%);
 }
 
-.bg-radial-glow {
-  background: radial-gradient(circle at top, rgba(41, 121, 255, 0.08) 0%, transparent 70%);
-}
-
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #121212;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: var(--accent);
+}
+
+/* Fluid Typography / Heading Utilities */
+h1, h2, h3, h4 {
+  text-wrap: balance;
 }

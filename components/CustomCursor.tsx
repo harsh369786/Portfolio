@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
 
 export default function CustomCursor() {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isClicking, setIsClicking] = useState(false);
   
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-
-  const springConfig = { damping: 25, stiffness: 250 };
-  const springX = useSpring(cursorX, springConfig);
-  const springY = useSpring(cursorY, springConfig);
+  
+  const springConfig = { stiffness: 400, damping: 28 };
+  const borderX = useSpring(cursorX, springConfig);
+  const borderY = useSpring(cursorY, springConfig);
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
@@ -19,44 +20,68 @@ export default function CustomCursor() {
       cursorY.set(e.clientY);
     };
 
-    const handleHover = (e: MouseEvent) => {
+    const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
-        target.tagName === "BUTTON" ||
-        target.tagName === "A" ||
-        target.closest("button") ||
-        target.closest("a") ||
-        target.classList.contains("interactive")
+        target.tagName.toLowerCase() === "button" ||
+        target.tagName.toLowerCase() === "a" ||
+        target.closest(".interactive")
       ) {
-        setIsHovered(true);
+        setIsHovering(true);
       } else {
-        setIsHovered(false);
+        setIsHovering(false);
       }
     };
 
+    const handleMouseDown = () => setIsClicking(true);
+    const handleMouseUp = () => setIsClicking(false);
+
     window.addEventListener("mousemove", moveCursor);
-    window.addEventListener("mouseover", handleHover);
+    window.addEventListener("mouseover", handleMouseOver);
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
       window.removeEventListener("mousemove", moveCursor);
-      window.removeEventListener("mouseover", handleHover);
+      window.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [cursorX, cursorY]);
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 w-2 h-2 bg-accent rounded-full pointer-events-none z-[10000] mix-blend-difference"
-      style={{
-        x: springX,
-        y: springY,
-        translateX: "-50%",
-        translateY: "-50%",
-        scale: isHovered ? 4 : 1,
-        backgroundColor: isHovered ? "rgba(41, 121, 255, 0.4)" : "#2979FF",
-        border: isHovered ? "1px solid #2979FF" : "none",
-        boxShadow: isHovered ? "0 0 20px rgba(41, 121, 255, 0.4)" : "none",
-      }}
-      transition={{ type: "spring", stiffness: 500, damping: 28 }}
-    />
+    <div className="hidden lg:block fixed inset-0 pointer-events-none z-[99999]">
+      {/* Main Dot */}
+      <motion.div
+        className="fixed top-0 left-0 w-2 h-2 bg-accent rounded-full -translate-x-1/2 -translate-y-1/2"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          scale: isClicking ? 0.5 : isHovering ? 2.5 : 1,
+        }}
+      />
+      
+      {/* Outer Circle */}
+      <motion.div
+        className="fixed top-0 left-0 w-10 h-10 border border-accent/40 rounded-full -translate-x-1/2 -translate-y-1/2"
+        style={{
+          x: borderX,
+          y: borderY,
+          scale: isClicking ? 0.8 : isHovering ? 1.8 : 1,
+          opacity: isHovering ? 0.6 : 1,
+          borderWidth: isHovering ? "2px" : "1px",
+        }}
+      />
+
+      {/* Trailing Glow */}
+      {isHovering && (
+        <motion.div
+          className="fixed top-0 left-0 w-32 h-32 bg-accent/10 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2"
+          style={{ x: cursorX, y: cursorY }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        />
+      )}
+    </div>
   );
 }
