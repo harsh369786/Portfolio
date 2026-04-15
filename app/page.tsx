@@ -37,7 +37,7 @@ export default function Home() {
           {/* Scroll Indicator - Fixed to viewport bottom */}
           <motion.div
             style={{ opacity: scrollIndicatorOpacity }}
-            className="fixed bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-[55] pointer-events-none"
+            className="fixed bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-[55] pointer-events-none scroll-indicator-bob"
           >
             <span className="text-[10px] uppercase tracking-[0.2em] text-secondary">Scroll</span>
             <div className="h-12 w-[1px] bg-gradient-to-b from-accent to-transparent" />

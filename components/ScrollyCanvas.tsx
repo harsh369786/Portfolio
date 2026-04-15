@@ -62,17 +62,25 @@ export default function ScrollyCanvas({ scrollYProgress }: ScrollyCanvasProps) {
   }, []);
 
   // Handle Resize and Initial Draw
+  // On mobile, render at 1x DPR to halve GPU fill-rate (major perf win)
   useEffect(() => {
     let debounceTimer: ReturnType<typeof setTimeout>;
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
+    const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2);
 
     const handleResize = () => {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         if (!canvasRef.current) return;
-        canvasRef.current.width = window.innerWidth;
-        canvasRef.current.height = window.innerHeight;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        canvasRef.current.width = w * dpr;
+        canvasRef.current.height = h * dpr;
+        canvasRef.current.style.width = `${w}px`;
+        canvasRef.current.style.height = `${h}px`;
         // Reset context after canvas resize (resize clears context state)
         ctxRef.current = canvasRef.current.getContext("2d", { alpha: false }) ?? null;
+        if (ctxRef.current) ctxRef.current.scale(dpr, dpr);
         renderFrame(Math.round(currentIndex.get()));
       }, 100);
     };
@@ -93,27 +101,29 @@ export default function ScrollyCanvas({ scrollYProgress }: ScrollyCanvasProps) {
     if (!ctx) return;
 
     const img = imagesRef.current[index];
-    const canvas = canvasRef.current;
+    // Use CSS pixel dimensions (ctx.scale handles DPR)
+    const cw = canvasRef.current.clientWidth || window.innerWidth;
+    const ch = canvasRef.current.clientHeight || window.innerHeight;
 
     // Object-fit: cover logic
     const imgRatio = img.width / img.height;
-    const canvasRatio = canvas.width / canvas.height;
+    const canvasRatio = cw / ch;
     let drawWidth, drawHeight, offsetX, offsetY;
 
     if (canvasRatio > imgRatio) {
-      drawWidth = canvas.width;
-      drawHeight = canvas.width / imgRatio;
+      drawWidth = cw;
+      drawHeight = cw / imgRatio;
       offsetX = 0;
-      offsetY = (canvas.height - drawHeight) / 2;
+      offsetY = (ch - drawHeight) / 2;
     } else {
-      drawWidth = canvas.height * imgRatio;
-      drawHeight = canvas.height;
-      offsetX = (canvas.width - drawWidth) / 2;
+      drawWidth = ch * imgRatio;
+      drawHeight = ch;
+      offsetX = (cw - drawWidth) / 2;
       offsetY = 0;
     }
 
-    ctx.fillStyle = "#121212";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#080808";
+    ctx.fillRect(0, 0, cw, ch);
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
   };
 

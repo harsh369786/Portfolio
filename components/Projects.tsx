@@ -15,13 +15,13 @@ function Testimonial({ quote, attribution }: TestimonialProps) {
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: 0.2 }}
-      className="mt-8 bg-[#111111] border-l-4 border-accent p-8 rounded-r-2xl relative overflow-hidden"
+      className="mt-8 bg-[#111111] border-l-4 border-accent p-6 md:p-8 rounded-r-2xl relative overflow-hidden"
     >
       <QuoteIcon className="absolute top-4 left-4 w-12 h-12 text-accent opacity-10" />
-      <p className="text-base text-[#D0D0D0] italic font-serif leading-relaxed relative z-10">
-        "{quote}"
+      <p className="text-sm md:text-base text-[#D0D0D0] italic font-serif leading-relaxed relative z-10">
+        &ldquo;{quote}&rdquo;
       </p>
-      <p className="mt-4 text-sm text-accent font-medium tracking-wide font-sans uppercase">
+      <p className="mt-4 text-xs md:text-sm text-accent font-medium tracking-wide font-sans uppercase">
         — {attribution}
       </p>
     </motion.div>
@@ -69,31 +69,52 @@ const PROJECTS = [
   }
 ];
 
+/* Stagger animation for section header */
+const headerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } }
+};
+
+const headerItemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+};
+
 export default function Projects() {
   return (
-    <section id="work" className="relative z-20 bg-background px-6 py-32 md:px-24 border-t border-white/5">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-20">
-          <p className="text-xs uppercase tracking-[0.4em] text-accent font-medium mb-4">Selected Work (02)</p>
-          <h2 className="text-4xl md:text-6xl font-heading font-bold tracking-tight text-white">Things I've Built</h2>
-        </div>
+    <section id="work" className="relative z-20 bg-background px-6 py-28 md:py-32 md:px-24">
+      {/* Gradient divider at top */}
+      <div className="section-divider absolute top-0 left-0 right-0" />
 
-        <div className="space-y-32">
+      <div className="max-w-7xl mx-auto">
+        {/* Animated Section Header */}
+        <motion.div 
+          className="mb-16 md:mb-20"
+          variants={headerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          <motion.p variants={headerItemVariants} className="text-xs uppercase tracking-[0.4em] text-accent font-medium mb-4">Selected Work (02)</motion.p>
+          <motion.h2 variants={headerItemVariants} className="text-3xl md:text-6xl font-heading font-bold tracking-tight text-white">Things I&apos;ve Built</motion.h2>
+        </motion.div>
+
+        <div className="space-y-20 md:space-y-32">
           {PROJECTS.map((project, index) => (
-            <div key={index} className="space-y-8">
+            <div key={index} className="space-y-6 md:space-y-8">
               <motion.div
                 initial={{ y: 40, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative flex flex-col lg:flex-row gap-12 bg-[#111111] p-8 md:p-12 rounded-3xl border border-white/5 transition-all duration-500 hover:border-accent/30 overflow-hidden"
+                className="group relative flex flex-col lg:flex-row gap-8 md:gap-12 bg-[#111111] p-6 md:p-12 rounded-2xl md:rounded-3xl border border-white/5 transition-all duration-500 hover:border-accent/30 overflow-hidden"
               >
                 {/* Accent Border Animation */}
                 <div className="absolute left-0 top-0 w-[4px] h-0 bg-accent transition-all duration-500 group-hover:h-full" />
 
                 {/* Left: Metadata */}
                 <div className="lg:w-1/4 space-y-4 md:space-y-6">
-                  <span className="text-6xl md:text-8xl font-heading font-black text-accent/10 group-hover:text-accent/20 transition-colors">
+                  <span className="text-5xl md:text-8xl font-heading font-black text-accent/10 group-hover:text-accent/20 transition-colors">
                     {project.number}
                   </span>
                   <div className="space-y-2">
@@ -109,22 +130,22 @@ export default function Projects() {
                 </div>
 
                 {/* Right: Content */}
-                <div className="lg:w-3/4 space-y-6 md:space-y-8">
+                <div className="lg:w-3/4 space-y-5 md:space-y-8">
                   <div>
-                    <h3 className="text-2xl md:text-5xl font-heading font-bold mb-2 group-hover:text-accent transition-colors text-white">
+                    <h3 className="text-xl md:text-5xl font-heading font-bold mb-2 group-hover:text-accent transition-colors text-white">
                       {project.title}
                     </h3>
-                    <p className="text-lg md:text-xl text-accent font-medium uppercase tracking-wide">{project.subtitle}</p>
+                    <p className="text-base md:text-xl text-accent font-medium uppercase tracking-wide">{project.subtitle}</p>
                   </div>
 
                   <p className="text-secondary text-sm md:text-lg leading-relaxed max-w-3xl">
                     {project.description}
                   </p>
 
-                  <ul className="space-y-3">
+                  <ul className="space-y-2 md:space-y-3">
                     {project.highlights.map((highlight, i) => (
-                      <li key={i} className="flex items-start gap-3 text-secondary text-base">
-                        <ChevronRight className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                      <li key={i} className="flex items-start gap-3 text-secondary text-sm md:text-base">
+                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-accent flex-shrink-0 mt-0.5" />
                         {highlight}
                       </li>
                     ))}
@@ -132,7 +153,7 @@ export default function Projects() {
 
                   <div className="flex flex-wrap gap-2">
                     {project.tech.map(t => (
-                      <span key={t} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-secondary font-medium uppercase tracking-wider">
+                      <span key={t} className="px-2 md:px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] md:text-[10px] text-secondary font-medium uppercase tracking-wider">
                         {t}
                       </span>
                     ))}
@@ -142,7 +163,7 @@ export default function Projects() {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-8 py-3 rounded-full border-2 border-accent text-accent font-bold uppercase tracking-widest text-xs transition-all hover:bg-accent hover:text-white group/btn interactive"
+                    className="inline-flex items-center gap-2 px-6 md:px-8 py-3 rounded-full border-2 border-accent text-accent font-bold uppercase tracking-widest text-[10px] md:text-xs transition-all hover:bg-accent hover:text-white group/btn interactive"
                   >
                     View Live Site
                     <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />

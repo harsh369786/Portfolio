@@ -12,11 +12,17 @@
   }
 }
 
+/* Only hide cursor on devices that actually have a pointer (not touch) */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none;
+  }
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
-  cursor: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -68,4 +74,28 @@ body {
 /* Fluid Typography / Heading Utilities */
 h1, h2, h3, h4 {
   text-wrap: balance;
+}
+
+/* Animated gradient divider between sections */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-glow) 20%,
+    var(--accent) 50%,
+    var(--accent-glow) 80%,
+    transparent 100%
+  );
+  opacity: 0.4;
+}
+
+/* Scroll indicator bob animation */
+@keyframes scroll-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.scroll-indicator-bob {
+  animation: scroll-bob 2s ease-in-out infinite;
 }
