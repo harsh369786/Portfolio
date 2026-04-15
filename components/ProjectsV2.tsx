@@ -133,7 +133,7 @@ function BentoCard({ project, index }: BentoCardProps) {
           style={{
             background: useTransform(
               [mouseXSpring, mouseYSpring],
-              ([mx, my]) => `radial-gradient(1000px circle at ${(mx + 0.5) * 100}% ${(my + 0.5) * 100}%, rgba(255,255,255,0.06), transparent 40%)`
+              ([mx, my]: any[]) => `radial-gradient(1000px circle at ${(mx + 0.5) * 100}% ${(my + 0.5) * 100}%, rgba(255,255,255,0.06), transparent 40%)`
             )
           }}
         />

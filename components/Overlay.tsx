@@ -47,7 +47,7 @@ export default function Overlay({ scrollYProgress }: OverlayProps) {
         style={{
           background: useTransform(
             [smoothX, smoothY],
-            ([x, y]) => `radial-gradient(1000px circle at ${x}px ${y}px, rgba(59,130,246,0.15), transparent 60%)`
+            ([x, y]: any[]) => `radial-gradient(1000px circle at ${x}px ${y}px, rgba(59,130,246,0.15), transparent 60%)`
           )
         }}
       />
