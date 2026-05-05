@@ -1,9 +1,52 @@
 "use client";
 
+import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MessageCircle, Linkedin, MapPin } from "lucide-react";
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setStatus(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result?.error || "Failed to send message.");
+      }
+
+      setStatus({ type: "success", message: "Message sent successfully." });
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error instanceof Error ? error.message : "Failed to send message.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="contact" className="relative z-20 bg-[#0A0A0A] px-6 py-28 md:py-40 md:px-24 overflow-hidden">
       {/* Dynamic Background Glows */}
@@ -74,12 +117,14 @@ export default function Contact() {
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-3xl" />
             
-            <form className="space-y-10 md:space-y-12 relative z-10" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-10 md:space-y-12 relative z-10" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                 <div className="relative group">
                   <input
                     type="text"
                     required
+                    value={formData.name}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                     className="w-full bg-transparent border-b border-white/10 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-accent transition-all text-base md:text-lg"
                     placeholder="Full Name"
                   />
@@ -89,6 +134,8 @@ export default function Contact() {
                   <input
                     type="email"
                     required
+                    value={formData.email}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                     className="w-full bg-transparent border-b border-white/10 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-accent transition-all text-base md:text-lg"
                     placeholder="Email Address"
                   />
@@ -99,6 +146,8 @@ export default function Contact() {
               <div className="relative group">
                 <input
                   type="text"
+                  value={formData.subject}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, subject: e.target.value }))}
                   className="w-full bg-transparent border-b border-white/10 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-accent transition-all text-base md:text-lg"
                   placeholder="Subject / Project Type"
                 />
@@ -109,6 +158,8 @@ export default function Contact() {
                 <textarea
                   rows={4}
                   required
+                  value={formData.message}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
                   className="w-full bg-transparent border-b border-white/10 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-accent transition-all text-base md:text-lg resize-none"
                   placeholder="Tell me about your vision..."
                 />
@@ -117,13 +168,23 @@ export default function Contact() {
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="group/send relative w-full h-14 md:h-16 bg-accent rounded-2xl overflow-hidden interactive"
               >
                 <div className="absolute inset-0 bg-white/10 translate-y-full group-hover/send:translate-y-0 transition-transform duration-500" />
                 <span className="relative z-10 flex items-center justify-center gap-3 text-white font-black uppercase tracking-[0.4em] text-xs">
-                  Dispatch Message
+                  {isSubmitting ? "Sending..." : "Dispatch Message"}
                 </span>
               </button>
+              {status && (
+                <p
+                  className={`text-sm ${
+                    status.type === "success" ? "text-green-400" : "text-red-400"
+                  }`}
+                >
+                  {status.message}
+                </p>
+              )}
             </form>
           </motion.div>
         </div>
